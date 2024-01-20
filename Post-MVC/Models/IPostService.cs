@@ -1,11 +1,11 @@
-﻿namespace Post.Models
+﻿namespace Post_MVC.Models
 {
     public interface IPostService
     {
-        int Add(PostClass item);
+        int Add(Post item);
         void Delete(int id);
-        void Update(PostClass item);
-        PostClass? FindById(int id);
-        List<PostClass> FindAll();
+        void Update(Post item);
+        Post? FindById(int id);
+        List<Post> FindAll();
     }
 }

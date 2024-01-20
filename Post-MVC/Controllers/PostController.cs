@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Post.Models;
+using Post_MVC.Models;
 
-namespace Post.Controllers
+namespace Post_MVC.Controllers
 {
     public class PostController : Controller
     {
@@ -24,7 +24,7 @@ namespace Post.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(PostClass model)
+        public IActionResult Create(Post model)
         {
             if (ModelState.IsValid)
             {
@@ -45,7 +45,7 @@ namespace Post.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(PostClass model)
+        public IActionResult Update(Post model)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +63,7 @@ namespace Post.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(PostClass model)
+        public IActionResult Delete(Post model)
         {
             _postService.Delete(model.Id);
             return RedirectToAction("Index");

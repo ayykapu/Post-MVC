@@ -1,3 +1,5 @@
+using Post_MVC.Models;
+
 namespace Post_MVC
 {
     public class Program
@@ -8,6 +10,7 @@ namespace Post_MVC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSingleton<IPostService, MemoryPostService>();
 
             var app = builder.Build();
 

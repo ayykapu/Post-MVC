@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace Post.Models
+namespace Post_MVC.Models
 {
     public enum Tags
     {
@@ -17,7 +17,7 @@ namespace Post.Models
         Politics,
     }
 
-    public class PostClass
+    public class Post
     {
         [HiddenInput]
         public int Id { get; set; }

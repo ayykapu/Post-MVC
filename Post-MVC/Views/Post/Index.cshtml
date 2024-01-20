@@ -1,0 +1,51 @@
+﻿@model List<Post>
+
+<h1>Lista postów</h1>
+<a class="btn btn-primary" asp-controller="Post" asp-action="Create">Utwórz post</a>
+@if (Model.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th> @Html.DisplayNameFor(model => model[0].Content)</th>
+                <th> @Html.DisplayNameFor(model => model[0].Author)</th>
+                <th> @Html.DisplayNameFor(model => model[0].Tags)</th>
+                <th> @Html.DisplayNameFor(model => model[0].Comment)</th>
+                <th> @Html.DisplayNameFor(model => model[0].Date)</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody style="background-color: lightblue;">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Content
+                    </td>
+
+                    <td>
+                        @item.Author
+                    </td>
+
+                    <td>
+                        @item.Date
+                    </td>
+
+                    <td>
+                        @item.Tags
+                    </td>
+
+                    <td>
+                        @item.Comment
+                    </td>
+
+                    <td>
+                        <a class="btn btn-outline-primary" style="background-color: whitesmoke;" asp-controller="Post" asp-action="Update" asp-route-id="@item.Id">Edytuj</a>
+                        <a class="btn btn-outline-primary" style="background-color: whitesmoke;" asp-controller="Post" asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
+                        <a class="btn btn-outline-primary" style="background-color: whitesmoke;" asp-controller="Post" asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
