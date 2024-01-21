@@ -30,7 +30,7 @@ namespace Data
                 new PostEntity { Id = 3, Content = "Content3", Author = "Author3", Date = new DateTime(2002, 12, 12), Comment = "Comment3", Tags = "Tech" },
                 new PostEntity { Id = 4, Content = "Content4", Author = "Author4", Date = new DateTime(2002, 04, 25), Comment = "Comment4", Tags = "Health" },
                 new PostEntity { Id = 5, Content = "Content5", Author = "Author5", Date = new DateTime(2013, 03, 09), Comment = "Comment5", Tags = "New" }
-                //gittedst
+
             );
         }
     }
