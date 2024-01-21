@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Post_MVC.Models;
 
 namespace Post_MVC.Controllers
@@ -18,9 +19,14 @@ namespace Post_MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public ActionResult Create()
         {
-            return View();
+            Post model = new Post();
+            model.Organizations = _postService
+                .FindAllOrganizations()
+                .Select(o => new SelectListItem() { Value = o.Id.ToString(), Text = o.Title })
+                .ToList();
+            return View(model);
         }
 
         [HttpPost]
@@ -28,14 +34,12 @@ namespace Post_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Date = DateTime.Now;
                 _postService.Add(model);
                 return RedirectToAction("Index");
             }
-            else
-            {
-                return View(model);
-            }
+
+            InitializeOrganizationsList(model);
+            return View(model);
         }
 
         [HttpGet]
@@ -53,6 +57,8 @@ namespace Post_MVC.Controllers
                 _postService.Update(model);
                 return RedirectToAction("Index");
             }
+
+            InitializeOrganizationsList(model);
             return View(model);
         }
 
@@ -72,6 +78,13 @@ namespace Post_MVC.Controllers
         public IActionResult Details(int id)
         {
             return View(_postService.FindById(id));
+        }
+        private void InitializeOrganizationsList(Post model)
+        {
+            model.Organizations = _postService
+                .FindAllOrganizations()
+                .Select(o => new SelectListItem() { Value = o.Id.ToString(), Text = o.Title })
+                .ToList();
         }
     }
 }

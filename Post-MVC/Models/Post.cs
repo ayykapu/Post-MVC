@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace Post_MVC.Models
@@ -25,22 +27,27 @@ namespace Post_MVC.Models
         [Display(Name = "Zawartość")]
         [Required(ErrorMessage = "Musisz podać zawartość wpisu!")]
         [StringLength(maximumLength: 150, ErrorMessage = "Post jest zbyt długi!")]
-        public required string Content { get; set; }
+        public string Content { get; set; }
 
         [Display(Name = "Autor wpisu")]
         [Required(ErrorMessage = "Musisz podać nick autora wpisu!")]
         [StringLength(maximumLength: 50, ErrorMessage = "Nick jest zbyt długi!")]
-        public required string Author { get; set; }
+        public string Author { get; set; }
 
         [DataType(DataType.Date)]
-        public required DateTime Date { get; set; }
+        public DateTime Date { get; set; }
 
         [Display(Name = "Komentarz")]
         [Required(ErrorMessage = "Komentarz jest wymagany!")]
-        public required string Comment { get; set; }
+        public string Comment { get; set; }
 
         [Display(Name = "Tagi")]
         [Required(ErrorMessage = "Musisz podać tag autora wpisu!")]
-        public required Tags Tags { get; set; }
+        public Tags Tags { get; set; }
+        [HiddenInput]
+        public int OrganizationId { get; set; }
+
+        [ValidateNever]
+        public List<SelectListItem> Organizations { get; set; }
     }
 }
