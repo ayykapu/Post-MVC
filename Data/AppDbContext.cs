@@ -11,7 +11,7 @@ namespace Data
     public class AppDbContext : DbContext
     {
         public DbSet<PostEntity> Posts { get; set; }
-        public DbSet<OrganizationEntity> Organizations { get; set; }
+        public DbSet<GroupEntity> Groups { get; set; }
 
         private string DbPath { get; set; }
         public AppDbContext()
@@ -25,23 +25,23 @@ namespace Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<OrganizationEntity>()
+            modelBuilder.Entity<GroupEntity>()
            .OwnsOne(e => e.Members);
 
             modelBuilder.Entity<PostEntity>()
-                .HasOne(e => e.Organization)
+                .HasOne(e => e.Group)
                 .WithMany(o => o.Posts)
-                .HasForeignKey(e => e.OrganizationId);
+                .HasForeignKey(e => e.GroupId);
 
-            modelBuilder.Entity<OrganizationEntity>().HasData(
-        new OrganizationEntity()
+            modelBuilder.Entity<GroupEntity>().HasData(
+        new GroupEntity()
         {
             Id = 1,
             Name = "WSEI",
             Description = "Wyższa Szkoła Ekonomii i Informatyki w Krakowie",
             CreateDate = new DateTime(2000, 04, 10),
         },
-        new OrganizationEntity()
+        new GroupEntity()
         {
             Id = 2,
             Name = "AGH",
@@ -49,9 +49,9 @@ namespace Data
             CreateDate = new DateTime(2011, 04, 10),
         } );
 
-            modelBuilder.Entity<OrganizationEntity>().OwnsOne(e => e.Members).HasData(
-                new { OrganizationEntityId = 1, NumberOfMembers = 30, HighestRankMember = "Member1", CountryMostMembers = "Polska" },
-                new { OrganizationEntityId = 2, NumberOfMembers = 50, HighestRankMember = "Member145/6", CountryMostMembers = "USA" } );
+            modelBuilder.Entity<GroupEntity>().OwnsOne(e => e.Members).HasData(
+                new { GroupEntityId = 1, NumberOfMembers = 30, HighestRankMember = "Member1", CountryMostMembers = "Polska" },
+                new { GroupEntityId = 2, NumberOfMembers = 50, HighestRankMember = "Member145/6", CountryMostMembers = "USA" } );
 
             modelBuilder.Entity<PostEntity>().HasData(
                 new PostEntity { Id = 1, Content = "Content1", Author = "Author1", Date = new DateTime(2000, 04, 10), Comment = "Comment1", Tags = "Sport" },

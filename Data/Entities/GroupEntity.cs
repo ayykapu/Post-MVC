@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Data.Entities
 {
-    public class OrganizationEntity
+    public class GroupEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }

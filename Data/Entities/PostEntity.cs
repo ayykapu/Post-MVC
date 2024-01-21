@@ -23,7 +23,7 @@ namespace Data.Entities
         public string Comment { get; set; }
         [MaxLength(30)]
         public string Tags { get; set; }
-        public int? OrganizationId { get; set; }
-        public OrganizationEntity? Organization { get; set; }
+        public int? GroupId { get; set; }
+        public GroupEntity? Group { get; set; }
     }
 }

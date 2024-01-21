@@ -17,7 +17,7 @@ namespace Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.1");
 
-            modelBuilder.Entity("Data.Entities.OrganizationEntity", b =>
+            modelBuilder.Entity("Data.Entities.GroupEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Organizations");
+                    b.ToTable("Groups");
 
                     b.HasData(
                         new
@@ -79,7 +79,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("OrganizationId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Tags")
@@ -89,7 +89,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizationId");
+                    b.HasIndex("GroupId");
 
                     b.ToTable("posts");
 
@@ -114,11 +114,11 @@ namespace Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Data.Entities.OrganizationEntity", b =>
+            modelBuilder.Entity("Data.Entities.GroupEntity", b =>
                 {
                     b.OwnsOne("Data.Members", "Members", b1 =>
                         {
-                            b1.Property<int>("OrganizationEntityId")
+                            b1.Property<int>("GroupEntityId")
                                 .HasColumnType("INTEGER");
 
                             b1.Property<string>("CountryMostMembers")
@@ -132,24 +132,24 @@ namespace Data.Migrations
                             b1.Property<int>("NumberOfMembers")
                                 .HasColumnType("INTEGER");
 
-                            b1.HasKey("OrganizationEntityId");
+                            b1.HasKey("GroupEntityId");
 
-                            b1.ToTable("Organizations");
+                            b1.ToTable("Groups");
 
                             b1.WithOwner()
-                                .HasForeignKey("OrganizationEntityId");
+                                .HasForeignKey("GroupEntityId");
 
                             b1.HasData(
                                 new
                                 {
-                                    OrganizationEntityId = 1,
+                                    GroupEntityId = 1,
                                     CountryMostMembers = "Polska",
                                     HighestRankMember = "Member1",
                                     NumberOfMembers = 30
                                 },
                                 new
                                 {
-                                    OrganizationEntityId = 2,
+                                    GroupEntityId = 2,
                                     CountryMostMembers = "USA",
                                     HighestRankMember = "Member145/6",
                                     NumberOfMembers = 50
@@ -161,14 +161,14 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.PostEntity", b =>
                 {
-                    b.HasOne("Data.Entities.OrganizationEntity", "Organization")
+                    b.HasOne("Data.Entities.GroupEntity", "Group")
                         .WithMany("Posts")
-                        .HasForeignKey("OrganizationId");
+                        .HasForeignKey("GroupId");
 
-                    b.Navigation("Organization");
+                    b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("Data.Entities.OrganizationEntity", b =>
+            modelBuilder.Entity("Data.Entities.GroupEntity", b =>
                 {
                     b.Navigation("Posts");
                 });

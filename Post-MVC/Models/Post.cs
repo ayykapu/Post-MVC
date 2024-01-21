@@ -45,9 +45,9 @@ namespace Post_MVC.Models
         [Required(ErrorMessage = "Musisz podać tag autora wpisu!")]
         public Tags Tags { get; set; }
         [HiddenInput]
-        public int OrganizationId { get; set; }
+        public int GroupId { get; set; }
 
         [ValidateNever]
-        public List<SelectListItem> Organizations { get; set; }
+        public List<SelectListItem> Groups { get; set; }
     }
 }

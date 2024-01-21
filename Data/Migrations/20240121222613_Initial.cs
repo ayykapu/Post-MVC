@@ -14,7 +14,7 @@ namespace Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Organizations",
+                name: "Groups",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -28,7 +28,7 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Organizations", x => x.Id);
+                    table.PrimaryKey("PK_Groups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,20 +42,20 @@ namespace Data.Migrations
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Comment = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Tags = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
-                    OrganizationId = table.Column<int>(type: "INTEGER", nullable: true)
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_posts_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
+                        name: "FK_posts_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
-                table: "Organizations",
+                table: "Groups",
                 columns: new[] { "Id", "CreateDate", "Description", "Name", "Members_CountryMostMembers", "Members_HighestRankMember", "Members_NumberOfMembers" },
                 values: new object[,]
                 {
@@ -65,7 +65,7 @@ namespace Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "posts",
-                columns: new[] { "Id", "Author", "Comment", "Content", "Date", "OrganizationId", "Tags" },
+                columns: new[] { "Id", "Author", "Comment", "Content", "Date", "GroupId", "Tags" },
                 values: new object[,]
                 {
                     { 1, "Author1", "Comment1", "Content1", new DateTime(2000, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Sport" },
@@ -73,9 +73,9 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_posts_OrganizationId",
+                name: "IX_posts_GroupId",
                 table: "posts",
-                column: "OrganizationId");
+                column: "GroupId");
         }
 
         /// <inheritdoc />
@@ -85,7 +85,7 @@ namespace Data.Migrations
                 name: "posts");
 
             migrationBuilder.DropTable(
-                name: "Organizations");
+                name: "Groups");
         }
     }
 }

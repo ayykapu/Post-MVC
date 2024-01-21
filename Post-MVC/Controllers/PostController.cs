@@ -22,8 +22,8 @@ namespace Post_MVC.Controllers
         public ActionResult Create()
         {
             Post model = new Post();
-            model.Organizations = _postService
-                .FindAllOrganizations()
+            model.Groups = _postService
+                .FindAllGroups()
                 .Select(o => new SelectListItem() { Value = o.Id.ToString(), Text = o.Name })
                 .ToList();
             return View(model);
@@ -38,7 +38,7 @@ namespace Post_MVC.Controllers
                 return RedirectToAction("Index");
             }
 
-            InitializeOrganizationsList(model);
+            InitializeGroupsList(model);
             return View(model);
         }
 
@@ -58,7 +58,7 @@ namespace Post_MVC.Controllers
                 return RedirectToAction("Index");
             }
 
-            InitializeOrganizationsList(model);
+            InitializeGroupsList(model);
             return View(model);
         }
 
@@ -79,10 +79,10 @@ namespace Post_MVC.Controllers
         {
             return View(_postService.FindById(id));
         }
-        private void InitializeOrganizationsList(Post model)
+        private void InitializeGroupsList(Post model)
         {
-            model.Organizations = _postService
-                .FindAllOrganizations()
+            model.Groups = _postService
+                .FindAllGroups()
                 .Select(o => new SelectListItem() { Value = o.Id.ToString(), Text = o.Name })
                 .ToList();
         }

@@ -57,9 +57,9 @@ namespace Post_MVC.Models
             return PostMapper.FromEntity(_context.Posts.Find(id));
         }
 
-        public List<OrganizationEntity> FindAllOrganizations()
+        public List<GroupEntity> FindAllGroups()
         {
-            return _context.Organizations.ToList();
+            return _context.Groups.ToList();
         }
     }
 }

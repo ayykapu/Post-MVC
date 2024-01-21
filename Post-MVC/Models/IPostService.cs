@@ -9,6 +9,6 @@ namespace Post_MVC.Models
         void Update(Post item);
         Post? FindById(int id);
         List<Post> FindAll();
-        List<OrganizationEntity> FindAllOrganizations();
+        List<GroupEntity> FindAllGroups();
     }
 }
