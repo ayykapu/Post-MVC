@@ -11,6 +11,7 @@ namespace Data
     public class AppDbContext : DbContext
     {
         public DbSet<PostEntity> Posts { get; set; }
+        public DbSet<OrganizationEntity> Organizations { get; set; }
 
         private string DbPath { get; set; }
         public AppDbContext()
@@ -24,13 +25,37 @@ namespace Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<OrganizationEntity>()
+           .OwnsOne(e => e.Members);
+
+            modelBuilder.Entity<PostEntity>()
+                .HasOne(e => e.Organization)
+                .WithMany(o => o.Posts)
+                .HasForeignKey(e => e.OrganizationId);
+
+            modelBuilder.Entity<OrganizationEntity>().HasData(
+        new OrganizationEntity()
+        {
+            Id = 1,
+            Name = "WSEI",
+            Description = "Wyższa Szkoła Ekonomii i Informatyki w Krakowie",
+            CreateDate = new DateTime(2000, 04, 10),
+        },
+        new OrganizationEntity()
+        {
+            Id = 2,
+            Name = "AGH",
+            Description = "Akademia Górniczo-Hutnicza w Krakowie",
+            CreateDate = new DateTime(2011, 04, 10),
+        } );
+
+            modelBuilder.Entity<OrganizationEntity>().OwnsOne(e => e.Members).HasData(
+                new { OrganizationEntityId = 1, NumberOfMembers = 30, HighestRankMember = "Member1", CountryMostMembers = "Polska" },
+                new { OrganizationEntityId = 2, NumberOfMembers = 50, HighestRankMember = "Member145/6", CountryMostMembers = "USA" } );
+
             modelBuilder.Entity<PostEntity>().HasData(
                 new PostEntity { Id = 1, Content = "Content1", Author = "Author1", Date = new DateTime(2000, 04, 10), Comment = "Comment1", Tags = "Sport" },
-                new PostEntity { Id = 2, Content = "Content2", Author = "Author2", Date = new DateTime(2001, 05, 11), Comment = "Comment2", Tags = "Sport" },
-                new PostEntity { Id = 3, Content = "Content3", Author = "Author3", Date = new DateTime(2002, 12, 12), Comment = "Comment3", Tags = "Tech" },
-                new PostEntity { Id = 4, Content = "Content4", Author = "Author4", Date = new DateTime(2002, 04, 25), Comment = "Comment4", Tags = "Health" },
-                new PostEntity { Id = 5, Content = "Content5", Author = "Author5", Date = new DateTime(2013, 03, 09), Comment = "Comment5", Tags = "New" }
-                //gt
+                new PostEntity { Id = 2, Content = "Content2", Author = "Author2", Date = new DateTime(2001, 05, 11), Comment = "Comment2", Tags = "Sport" }
             );
         }
     }

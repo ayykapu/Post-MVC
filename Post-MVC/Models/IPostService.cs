@@ -1,4 +1,6 @@
-﻿namespace Post_MVC.Models
+﻿using Data.Entities;
+
+namespace Post_MVC.Models
 {
     public interface IPostService
     {
@@ -7,5 +9,6 @@
         void Update(Post item);
         Post? FindById(int id);
         List<Post> FindAll();
+        List<OrganizationEntity> FindAllOrganizations();
     }
 }
