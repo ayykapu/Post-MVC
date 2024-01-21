@@ -1,4 +1,5 @@
 using Post_MVC.Models;
+using System.Xml.Linq;
 
 namespace Post_MVC
 {
@@ -9,8 +10,10 @@ namespace Post_MVC
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<Data.AppDbContext>();
+            builder.Services.AddTransient<IPostService, EFPostService>();
             builder.Services.AddControllersWithViews();
-            builder.Services.AddSingleton<IPostService, MemoryPostService>();
+            //builder.Services.AddSingleton<IPostService, MemoryPostService>();
 
             var app = builder.Build();
 
