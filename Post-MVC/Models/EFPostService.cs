@@ -2,6 +2,7 @@
 using Data;
 using Post_MVC.Mappers;
 using Post_MVC.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Post_MVC.Models
 {
@@ -14,16 +15,16 @@ namespace Post_MVC.Models
             _context = context;
         }
 
-        public int Add(Post post)
+        public int Add(Post item)
         {
-            var entity = _context.Posts.Add(PostMapper.ToEntity(post));
+            var e = _context.Posts.Add(PostMapper.ToEntity(item));
             _context.SaveChanges();
-            return entity.Entity.Id;
+            return e.Entity.PostId;
         }
 
         public void Delete(int id)
         {
-            PostEntity? find = _context.Posts.Find(id);
+            var find = _context.Posts.Find(id);
             if (find != null)
             {
                 _context.Posts.Remove(find);
@@ -31,35 +32,40 @@ namespace Post_MVC.Models
             }
         }
 
-
-        public void DeleteById(int id)
-        {
-            PostEntity entity = _context.Posts.Find(id);
-            if (entity != null)
-            {
-                _context.Posts.Remove(entity);
-                _context.SaveChanges();
-            }
-        }
-        public void Update(Post post)
-        {
-            _context.Posts.Update(PostMapper.ToEntity(post));
-            _context.SaveChanges();
-
-        }
         public List<Post> FindAll()
         {
-            return _context.Posts.Select(e => PostMapper.FromEntity(e)).ToList();
+            return _context
+                 .Posts
+                 .Include(p => p.Tag)
+                 .Select(e => PostMapper.FromEntity(e))
+                 .ToList();
         }
 
-        public Post FindById(int id)
+        public Post? FindById(int id)
         {
-            return PostMapper.FromEntity(_context.Posts.Find(id));
+            var find = _context.Posts.Include(p => p.Tag).SingleOrDefault(p => p.PostId == id);
+            return find is null ? null : PostMapper.FromEntity(find);
         }
 
-        public List<GroupEntity> FindAllGroups()
+        public List<Post> FindByTag(int tagId)
         {
-            return _context.Groups.ToList();
+            return _context.Posts.Include(p => p.Tag).Where(o => o.TagId == tagId).Select(o => PostMapper.FromEntity(o)).ToList();
         }
+
+        public PagingList<Post> FindPage(int page, int size, List<Post> posts)
+        {
+            return PagingList<Post>.Create(
+                  (p, s) => posts.OrderBy(c => c.PostDate).Skip((p - 1) * s).Take(s)
+                  , page, size, posts.Count()
+              );
+        }
+
+        public void Update(Post model)
+        {
+            var entity = PostMapper.ToEntity(model);
+            _context.Update(entity);
+            _context.SaveChanges();
+        }
+
     }
 }

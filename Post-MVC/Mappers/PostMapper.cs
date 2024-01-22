@@ -9,12 +9,12 @@ namespace Post_MVC.Mappers
         {
             return new Post()
             {
-                Id = entity.Id,
-                Content = entity.Content,
-                Author = entity.Author,
-                Comment = entity.Comment,
-                Date = entity.Date,
-                Tags = (Tags)Enum.Parse(typeof(Tags), entity.Tags),
+                PostId = entity.PostId,
+                PostAuthor = entity.PostAuthor,
+                PostContent = entity.PostContent,
+                TagId = entity.TagId,
+                PostDate = entity.PostDate,
+                Tag = entity.Tag,
             };
         }
 
@@ -22,12 +22,12 @@ namespace Post_MVC.Mappers
         {
             return new PostEntity()
             {
-                Id = model.Id,
-                Content = model.Content,
-                Author = model.Author,
-                Comment = model.Comment,
-                Date = model.Date,
-                Tags = model.Tags.ToString(),
+                PostId = model.PostId,
+                PostAuthor = model.PostAuthor,
+                PostContent = model.PostContent,
+                TagId = model.TagId,
+                PostDate = model.PostDate,
+                Tag = model.Tag,
             };
         }
     }

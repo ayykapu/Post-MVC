@@ -1,5 +1,7 @@
 using Post_MVC.Models;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Post_MVC
 {
@@ -8,12 +10,13 @@ namespace Post_MVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+          
 
             // Add services to the container.
             builder.Services.AddDbContext<Data.AppDbContext>();
+
             builder.Services.AddTransient<IPostService, EFPostService>();
             builder.Services.AddControllersWithViews();
-            //builder.Services.AddSingleton<IPostService, MemoryPostService>();
 
             var app = builder.Build();
 

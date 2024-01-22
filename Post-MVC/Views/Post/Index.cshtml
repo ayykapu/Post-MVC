@@ -7,11 +7,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th> @Html.DisplayNameFor(model => model[0].Content)</th>
-                <th> @Html.DisplayNameFor(model => model[0].Author)</th>
-                <th> @Html.DisplayNameFor(model => model[0].Tags)</th>
-                <th> @Html.DisplayNameFor(model => model[0].Comment)</th>
-                <th> @Html.DisplayNameFor(model => model[0].Date)</th>  
+                <th> @Html.DisplayNameFor(model => model[0].PostContent)</th>
+                <th> @Html.DisplayNameFor(model => model[0].PostAuthor)</th>
+                <th> @Html.DisplayNameFor(model => model[0].PostDate)</th>
                 <th>Akcje</th>
             </tr>
         </thead>
@@ -20,29 +18,21 @@
             {
                 <tr>
                     <td>
-                        @item.Content
+                        @item.PostContent
                     </td>
 
                     <td>
-                        @item.Author
+                        @item.PostAuthor
                     </td>
 
                     <td>
-                        @item.Tags.GetDisplayName()
+                        @item.PostDate
                     </td>
 
                     <td>
-                        @item.Comment
-                    </td>
-
-                    <td>
-                        @item.Date
-                    </td>
-
-                    <td>
-                        <a class="btn btn-outline-primary" style="background-color: whitesmoke;" asp-controller="Post" asp-action="Update" asp-route-id="@item.Id">Edytuj</a>
-                        <a class="btn btn-outline-primary" style="background-color: whitesmoke;" asp-controller="Post" asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
-                        <a class="btn btn-outline-primary" style="background-color: whitesmoke;" asp-controller="Post" asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                        <a class="btn btn-outline-primary" style="background-color: whitesmoke;" asp-controller="Post" asp-action="Update" asp-route-id="@item.PostId">Edytuj</a>
+                        <a class="btn btn-outline-primary" style="background-color: whitesmoke;" asp-controller="Post" asp-action="Details" asp-route-id="@item.PostId">Szczegóły</a>
+                        <a class="btn btn-outline-primary" style="background-color: whitesmoke;" asp-controller="Post" asp-action="Delete" asp-route-id="@item.PostId">Usuń</a>
                     </td>
                 </tr>
             }

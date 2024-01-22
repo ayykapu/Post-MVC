@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Post_MVC.Models;
 
@@ -13,33 +14,46 @@ namespace Post_MVC.Controllers
             _postService = postService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int TagId = 0)
         {
-            return View(_postService.FindAll());
+            ViewBag.TagId = TagId;
+            if (TagId == 0) 
+            {
+                return View(_postService.FindAll()); 
+            }
+            else 
+            { 
+                return View(_postService.FindByTag(TagId)); 
+            }
+               
+        }
+        public IActionResult PagedIndex(int tagId = 0, int page = 1, int size = 2)
+        {
+            List<Post> list = new List<Post>();
+            if (tagId == 0)
+                list = _postService.FindAll();
+            else
+                list = _postService.FindByTag(tagId);
+            ViewBag.TagId = tagId;
+            PagingList<Post> pagingList = _postService.FindPage(page, size, list);
+            return View(pagingList);
         }
 
         [HttpGet]
         public ActionResult Create()
         {
-            Post model = new Post();
-            model.Groups = _postService
-                .FindAllGroups()
-                .Select(o => new SelectListItem() { Value = o.Id.ToString(), Text = o.Name })
-                .ToList();
-            return View(model);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Post model)
+        public IActionResult Create(Post post)
         {
             if (ModelState.IsValid)
             {
-                _postService.Add(model);
-                return RedirectToAction("Index");
+                _postService.Add(post);
+                return RedirectToAction("PagedIndex");
             }
-
-            InitializeGroupsList(model);
-            return View(model);
+            return View();
         }
 
         [HttpGet]
@@ -53,38 +67,32 @@ namespace Post_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Date = DateTime.Now;
                 _postService.Update(model);
-                return RedirectToAction("Index");
+                return RedirectToAction("PagedIndex");
             }
-
-            InitializeGroupsList(model);
-            return View(model);
+            return View();
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
             return View(_postService.FindById(id));
+
         }
 
         [HttpPost]
         public IActionResult Delete(Post model)
         {
-            _postService.Delete(model.Id);
-            return RedirectToAction("Index");
+            _postService.Delete(model.PostId);
+            return RedirectToAction("PagedIndex");
         }
         [HttpGet]
         public IActionResult Details(int id)
         {
-            return View(_postService.FindById(id));
+            var model = _postService.FindById(id);
+            return model is null ? NotFound() : View(model);
         }
-        private void InitializeGroupsList(Post model)
-        {
-            model.Groups = _postService
-                .FindAllGroups()
-                .Select(o => new SelectListItem() { Value = o.Id.ToString(), Text = o.Name })
-                .ToList();
-        }
+
+       
     }
 }

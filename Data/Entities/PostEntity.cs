@@ -8,22 +8,20 @@ using System.Threading.Tasks;
 
 namespace Data.Entities
 {
-    [Table("posts")]
     public class PostEntity
     {
-        public int Id { get; set; }
+        [Key]
+        public int PostId { get; set; }
         [Required]
-        [MaxLength(100)]
-        public string Content { get; set; }
+        public string PostContent { get; set; }
         [Required]
-        [MaxLength(50)]
-        public string Author { get; set; }
-        public DateTime Date { get; set; }
-        [MaxLength(100)]
-        public string Comment { get; set; }
-        [MaxLength(30)]
-        public string Tags { get; set; }
-        public int? GroupId { get; set; }
-        public GroupEntity? Group { get; set; }
+        public string PostAuthor { get; set; }
+        [Required]
+        public DateTime PostDate { get; set; }
+        [Required]
+        public int TagId {get; set; }
+        [Required]
+        public TagEntity? Tag { get; set; }
+        public ISet<CommentEntity>? Comments { get; set; }
     }
 }

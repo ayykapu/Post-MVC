@@ -1,0 +1,154 @@
+﻿@model PagingList<Post>
+
+<div class="d-flex justify-content-between mb-3">
+    <h1>
+        Posty
+    </h1>
+
+    <div class="col-md-3 ml-auto">
+        <form method="get" asp-controller="Post" asp-action="PagedIndex">
+            <select id="filter" name="tagId" style="height: 30px; background-color: white; color: black;" onchange="this.form.submit()">
+            </select>
+        </form>
+    </div>
+</div>
+
+@if (Model.Data.Count() > 0)
+{
+    <div class="row">
+        @foreach (var item in Model.Data)
+        {
+            <div style="background-color: lightskyblue" class="col-md-8 p-3 mb-5">
+                <p class="mb-3" style="font-size: x-large;">
+                    @item.PostContent
+                </p>
+                <p class="mb-3">
+                    @item.PostAuthor
+                </p>
+                <p class="mb-3">
+                    @item.Tag.TagTitle
+                </p>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-5">
+                    <div class="mb-2">
+                        <a class="btn btn-primary btn-block btn-fixed-height" asp-controller="Post" asp-action="Update" asp-route-id="@item.PostId">Edytuj</a>
+                    </div>
+                    <div class="mb-2">
+                        <a class="btn btn-primary btn-block btn-fixed-height" asp-controller="Post" asp-action="Details" asp-route-id="@item.PostId">Szczegóły</a>
+                    </div>
+                    <div class="mb-2">
+                        <a class="btn btn-primary btn-block btn-fixed-height" asp-controller="Post" asp-action="Delete" asp-route-id="@item.PostId">Usuń</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+
+<style>
+    .btn-fixed-height {
+        width: 100px;
+    }
+</style>
+
+
+<nav aria-label="Books page navigation">
+    <ul class="pagination">
+        @if (Model.IsPrevious)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Post"
+                   asp-action="PagedIndex"
+                   asp-route-page="@(Model.Page - 1)"
+                   asp-route-size="@Model.Size">
+                    Wstecz
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Wstecz</span>
+            </li>
+        }
+        <li class="page-item disabled">
+            <span class="page-link">@Model.Page</span>
+        </li>
+        @if (Model.IsNext)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Post"
+                   asp-action="PagedIndex"
+                   asp-route-page="@(Model.Page + 1)"
+                   asp-route-size="@Model.Size">
+                    Dalej
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Dalej</span>
+            </li>
+        }
+    </ul>
+</nav>
+
+<style>
+    nav {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        margin: 0;
+    }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+</style>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let select = document.getElementById("filter");
+            fetch(`/api/tags`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    throw "no ok, status " + response.status;
+                })
+                .then(json => {
+                    select.innerHTML = '';
+                    let all = document.createElement('option');
+                    all.setAttribute('value', 0);
+                    all.innerText = "Filtruj Tag";
+                    select.appendChild(all);
+                    for (let item of json) {
+                        let option = document.createElement('option');
+                        option.setAttribute('value', item.id);
+                        option.innerText = item.tagTitle;
+                        option.setAttribute('id', "option" + item.id);
+                        if (item.id == @ViewBag.tagId) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    }
+                })
+                .catch(e => {
+                    console.log('cant get data from api', e);
+                });
+        });
+    </script>
+}

@@ -1,39 +1,62 @@
 ﻿@model Post
-
 <h1>Szczegóły</h1>
 
 <table class="table table-bordered" style="background-color: lightblue;">
     <tr>
-        <th>ID</th>
-        <td>@Model.Id</td>
+        <th>Id</th>
+        <td>@Model.PostId</td>
     </tr>
 
     <tr>
         <th>Zawartość</th>
-        <td>@Model.Content</td>
+        <td>@Model.PostContent</td>
     </tr>
 
     <tr>
         <th>Autor</th>
-        <td>@Model.Author</td>
+        <td>@Model.PostAuthor</td>
     </tr>
 
     <tr>
         <th>Data publikacji</th>
-        <td>@Model.Date</td>
+        <td>@Model.PostDate</td>
     </tr>
 
     <tr>
-        <th>Tagi</th>
-        <td>@Model.Tags.GetDisplayName()</td>
-    </tr>
-
-    <tr>
-        <th>Komentarz</th>
-        <td>@Model.Comment</td>
+        <th>Tag</th>
+        <td>@Model.Tag.TagTitle</td>
     </tr>
 
 </table>
 <span>
-    <a asp-controller="Post" asp-action="Index"><button type="submit" class="btn btn-primary">Powrót</button></a>
+    <a asp-controller="Post" asp-action="PagedIndex"><button type="submit" class="btn btn-primary">Powrót</button></a>
 </span>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const select = document.getElementById("TagId");
+
+            try {
+                const response = await fetch(`/api/tags`);
+
+                if (!response.ok) {
+                    throw "No OK, status " + response.status;
+                }
+
+                const json = await response.json();
+
+                select.innerHTML = '';
+
+                for (let item of json) {
+                    let option = document.createElement('option');
+                    option.setAttribute('value', item.id);
+                    option.innerText = item.tagTitle;
+                    select.appendChild(option);
+                }
+            } catch (e) {
+                console.log('Can\'t get data from API', e);
+            }
+        });
+    </script>
+}
