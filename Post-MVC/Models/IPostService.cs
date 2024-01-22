@@ -6,9 +6,10 @@ namespace Post_MVC.Models
     {
         int Add(Post item);
         void Delete(int id);
-        void Update(Post item);
         Post? FindById(int id);
         List<Post> FindAll();
-        List<GroupEntity> FindAllGroups();
+        void Update(Post item);
+        List<Post> FindByTag(int tagId);
+        PagingList<Post> FindPage(int page, int size, List<Post> posts);
     }
 }

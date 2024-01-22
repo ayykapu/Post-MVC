@@ -1,39 +1,53 @@
 ﻿@model Post
+<h2 class="ms-4">
+    Szczegóły posta
+</h2>
+<div style="padding: 15px; background-color: rgb(51, 51, 51);
+               border-radius: 10px; box-shadow: 0 0 10px rgb(51, 51, 51);
+               color: white;"
+     class="m-4">
+    <p>
+        Post:
+    </p>
+    <div class="rounded p-2 mb-3" style="box-shadow: 0 0 10px rgb(80, 80, 80); background-color: rgb(99, 99, 99)">
+        <p class="mb-3">
+            Autor: @Model.PostAuthor
+        </p>
+        <p class="mb-3">
+            Data publikacji: @Model.PostDate.ToString("yyyy-MM-dd")
+        </p>
+        <p class="mb-3">
+            Treść posta: @Model.PostContent
+        </p>
+        <p>
+            Tag: @Model.Tag.TagTitle
+        </p>
+        <p class="mb-1">Liczba komentarzy: <span id="commentCount"></span></p>
+    </div>
+    <p>
+        Dodaj komentarz:
+    </p>
+    <div class="rounded p-2 mb-3" style="box-shadow: 0 0 10px rgb(80, 80, 80); background-color: rgb(99, 99, 99)">
+        <form class="mb-3" asp-controller="Post" asp-action="AddComment" method="post">
+            <input type="hidden" name="postId" value="@Model.PostId" />
 
-<h1>Szczegóły</h1>
+            <label for="author" class="mb-3">Autor:</label>
+            <input required class="form-control mb-3" id="author" name="author" />
+            <span class="text-danger"></span>
 
-<table class="table table-bordered" style="background-color: lightblue;">
-    <tr>
-        <th>ID</th>
-        <td>@Model.Id</td>
-    </tr>
+            <label for="content" class="mb-3">Komentarz:</label>
+            <input required class="form-control mb-3" id="content" name="content" />
+            <span class="text-danger"></span>
 
-    <tr>
-        <th>Zawartość</th>
-        <td>@Model.Content</td>
-    </tr>
+            <button type="submit" class="btn btn-primary">
+                Dodaj komentarz
+            </button>
+        </form>
+    </div>
 
-    <tr>
-        <th>Autor</th>
-        <td>@Model.Author</td>
-    </tr>
+    <p class="mb-3">Komentarze:</p>
+    <div id="comments">
+    </div>
+    <a class="mt-1 btn btn-primary" asp-action="PagedIndex">Powrót</a>
+</div>
 
-    <tr>
-        <th>Data publikacji</th>
-        <td>@Model.Date</td>
-    </tr>
-
-    <tr>
-        <th>Tagi</th>
-        <td>@Model.Tags.GetDisplayName()</td>
-    </tr>
-
-    <tr>
-        <th>Komentarz</th>
-        <td>@Model.Comment</td>
-    </tr>
-
-</table>
-<span>
-    <a asp-controller="Post" asp-action="Index"><button type="submit" class="btn btn-primary">Powrót</button></a>
-</span>
