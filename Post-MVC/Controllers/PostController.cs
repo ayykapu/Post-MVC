@@ -14,19 +14,18 @@ namespace Post_MVC.Controllers
             _postService = postService;
         }
 
-        public IActionResult Index(int TagId = 0)
+        [AllowAnonymous]
+        public IActionResult Index(int tagId = 0)
         {
-            ViewBag.TagId = TagId;
-            if (TagId == 0) 
-            {
-                return View(_postService.FindAll()); 
-            }
-            else 
-            { 
-                return View(_postService.FindByTag(TagId)); 
-            }
-               
+            ViewBag.TagId = tagId;
+            if (tagId == 0)
+                return View(_postService.FindAll());
+            else
+                return View(_postService.FindByTag(tagId));
         }
+
+        [AllowAnonymous]
+
         public IActionResult PagedIndex(int tagId = 0, int page = 1, int size = 2)
         {
             List<Post> list = new List<Post>();
@@ -39,29 +38,49 @@ namespace Post_MVC.Controllers
             return View(pagingList);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
-        public IActionResult Create(Post post)
+        public IActionResult Create(Post model)
         {
             if (ModelState.IsValid)
             {
-                _postService.Add(post);
+                _postService.Add(model);
                 return RedirectToAction("PagedIndex");
             }
             return View();
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            return View(_postService.FindById(id));
+
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public IActionResult Delete(Post model)
+        {
+            _postService.Delete(model.PostId);
+            return RedirectToAction("PagedIndex");
+        }
+
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public IActionResult Update(int id)
         {
             return View(_postService.FindById(id));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult Update(Post model)
         {
@@ -73,19 +92,7 @@ namespace Post_MVC.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Delete(int id)
-        {
-            return View(_postService.FindById(id));
-
-        }
-
-        [HttpPost]
-        public IActionResult Delete(Post model)
-        {
-            _postService.Delete(model.PostId);
-            return RedirectToAction("PagedIndex");
-        }
+        [Authorize]
         [HttpGet]
         public IActionResult Details(int id)
         {
@@ -93,6 +100,8 @@ namespace Post_MVC.Controllers
             return model is null ? NotFound() : View(model);
         }
 
-       
+        
     }
+
+
 }

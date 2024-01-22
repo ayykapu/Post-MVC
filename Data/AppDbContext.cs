@@ -1,5 +1,6 @@
 ﻿using Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         public DbSet<TagEntity> Tags { get; set; }
         public DbSet<PostEntity> Posts { get; set; }
@@ -152,6 +153,53 @@ namespace Data
                     PostDate = DateTime.Now,
                 }
                 );
+
+            base.OnModelCreating(modelBuilder);
+
+            var admin = new IdentityUser()
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "Kacper",
+                NormalizedUserName = "KACPER",
+                Email = "kacper@wsei.edu.pl",
+                NormalizedEmail = "KACPER@WSEI.EDU.PL",
+                EmailConfirmed = true,
+            };
+
+            var user = new IdentityUser()
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "Hubert",
+                NormalizedUserName = "HUBERT",
+                Email = "hubert@wsei.edu.pl",
+                NormalizedEmail = "HUBERT@WSEI.EDU.PL",
+                EmailConfirmed = true,
+            };
+            PasswordHasher<IdentityUser> passwordHasher = new PasswordHasher<IdentityUser>();
+
+            admin.PasswordHash = passwordHasher.HashPassword(admin, "123!Abc");
+            user.PasswordHash = passwordHasher.HashPassword(user, "1234Abcd!");
+
+            modelBuilder.Entity<IdentityUser>().HasData(admin);
+            modelBuilder.Entity<IdentityUser>().HasData(user);
+
+            var adminRole = new IdentityRole()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "admin",
+                NormalizedName = "ADMIN",
+            };
+
+            adminRole.ConcurrencyStamp = adminRole.Id;
+            modelBuilder.Entity<IdentityRole>().HasData(adminRole);
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>()
+                {
+                    RoleId = adminRole.Id,
+                    UserId = admin.Id,
+                });
+
         }
     }
 }
