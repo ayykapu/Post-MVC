@@ -102,6 +102,4 @@ namespace Post_MVC.Controllers
 
         
     }
-
-
 }
