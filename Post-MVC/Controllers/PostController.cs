@@ -5,6 +5,7 @@ using Post_MVC.Models;
 
 namespace Post_MVC.Controllers
 {
+
     public class PostController : Controller
     {
         private readonly IPostService _postService;
@@ -24,8 +25,8 @@ namespace Post_MVC.Controllers
                 return View(_postService.FindByTag(tagId));
         }
 
-        [AllowAnonymous]
 
+        [AllowAnonymous]
         public IActionResult PagedIndex(int tagId = 0, int page = 1, int size = 2)
         {
             List<Post> list = new List<Post>();
@@ -38,14 +39,14 @@ namespace Post_MVC.Controllers
             return View(pagingList);
         }
 
-        [Authorize(Roles = "admin")]
+
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        [Authorize(Roles = "admin")]
+ 
         [HttpPost]
         public IActionResult Create(Post model)
         {
@@ -57,7 +58,7 @@ namespace Post_MVC.Controllers
             return View();
         }
 
-        [Authorize(Roles = "admin")]
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -65,7 +66,6 @@ namespace Post_MVC.Controllers
 
         }
 
-        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult Delete(Post model)
         {
@@ -73,14 +73,14 @@ namespace Post_MVC.Controllers
             return RedirectToAction("PagedIndex");
         }
 
-        [Authorize(Roles = "admin")]
+
         [HttpGet]
         public IActionResult Update(int id)
         {
             return View(_postService.FindById(id));
         }
 
-        [Authorize(Roles = "admin")]
+
         [HttpPost]
         public IActionResult Update(Post model)
         {
@@ -92,7 +92,7 @@ namespace Post_MVC.Controllers
             return View();
         }
 
-        [Authorize]
+
         [HttpGet]
         public IActionResult Details(int id)
         {

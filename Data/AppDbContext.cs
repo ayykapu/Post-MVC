@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser>
+    public class AppDbContext : DbContext
     {
         public DbSet<TagEntity> Tags { get; set; }
         public DbSet<PostEntity> Posts { get; set; }
@@ -31,175 +31,263 @@ namespace Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //base.OnModelCreating(modelBuilder);
+
+            //string ADMIN_ID = Guid.NewGuid().ToString();
+            //string ROLE_ID = Guid.NewGuid().ToString();
+
+            //modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            //{
+            //    Name = "admin",
+            //    NormalizedName = "ADMIN",
+            //    Id = ROLE_ID,
+            //    ConcurrencyStamp = ROLE_ID
+            //});
+
+            //var admin = new IdentityUser
+            //{
+            //    Id = ADMIN_ID,
+            //    Email = "adam@wsei.edu.pl",
+            //    NormalizedEmail = "ADAM@WSEI.EDU.PL",
+            //    EmailConfirmed = true,
+            //    UserName = "adam",
+            //    NormalizedUserName = "ADMIN"
+            //};
+
+            //PasswordHasher<IdentityUser> ph = new PasswordHasher<IdentityUser>();
+            //admin.PasswordHash = ph.HashPassword(admin, "1234abcd!@#$ABCD");
+
+            //modelBuilder.Entity<IdentityUser>().HasData(admin);
+
+            //modelBuilder.Entity<IdentityUserRole<string>>()
+            //.HasData(new IdentityUserRole<string>
+            //{
+            //    RoleId = ROLE_ID,
+            //    UserId = ADMIN_ID
+            //});
+
 
             modelBuilder.Entity<PostEntity>().HasOne(c => c.Tag).WithMany(o => o.Posts).HasForeignKey(c => c.TagId);
             modelBuilder.Entity<CommentEntity>().HasOne(c => c.Post).WithMany(o => o.Comments).HasForeignKey(c => c.PostId);
 
             modelBuilder.Entity<TagEntity>().HasData(
-                new
-                {
-                    TagId = 1,
-                    TagTitle = "Tag1",
+         new
+         {
+             TagId = 1,
+             TagTitle = "Rozrywka",
+         },
+         new
+         {
+             TagId = 2,
+             TagTitle = "Nauka",
+         },
+         new
+         {
+             TagId = 3,
+             TagTitle = "Polityka",
+         },
+         new
+         {
+             TagId = 4,
+             TagTitle = "Zdrowie",
+         },
+         new
+         {
+             TagId = 5,
+             TagTitle = "Sport",
+         },
+         new
+         {
+             TagId = 6,
+             TagTitle = "Technologia",
+         },
+         new
+         {
+             TagId = 7,
+             TagTitle = "Rozwój",
+         },
+         new
+         {
+             TagId = 8,
+             TagTitle = "Odkrycia",
+         },
+         new
+         {
+             TagId = 9,
+             TagTitle = "Podróże",
+         },
+         new
+         {
+             TagId = 10,
+             TagTitle = "Innowacje",
+         }
+     );
+                modelBuilder.Entity<CommentEntity>().HasData(
+          new
+          {
+              CommentId = 1,
+              PostId = 1,
+              CommentAuthor = "Użytkownik1",
+              CommentContent = "Świetny post!",
+              CommentDate = DateTime.Now.AddDays(-2),
+          },
+          new
+          {
+              CommentId = 2,
+              PostId = 1,
+              CommentAuthor = "Użytkownik2",
+              CommentContent = "Ciekawe spostrzeżenia!",
+              CommentDate = DateTime.Now.AddDays(-1),
+          },
+          new
+          {
+              CommentId = 3,
+              PostId = 2,
+              CommentAuthor = "Użytkownik3",
+              CommentContent = "Mam pytanie...",
+              CommentDate = DateTime.Now.AddHours(-6),
+          },
+          new
+          {
+              CommentId = 4,
+              PostId = 3,
+              CommentAuthor = "Użytkownik4",
+              CommentContent = "Dobrze napisane!",
+              CommentDate = DateTime.Now.AddMinutes(-30),
+          },
+          new
+          {
+              CommentId = 5,
+              PostId = 3,
+              CommentAuthor = "Użytkownik5",
+              CommentContent = "Zgadzam się całkowicie!",
+              CommentDate = DateTime.Now.AddSeconds(-10),
+          }
+      );
 
-                },
-                new
-                {
-                    TagId = 2,
-                    TagTitle = "Tag2",
-
-                },
-                new
-                {
-                    TagId = 3,
-                    TagTitle = "Tag3",
-
-                },
-                new
-                {
-                    TagId = 4,
-                    TagTitle = "Tag4",
-
-                },
-                new
-                {
-                    TagId = 5,
-                    TagTitle = "Tag5",
-
-                }
-                );
-            modelBuilder.Entity<CommentEntity>().HasData(
-                new
-                {
-                    CommentId = 1,
-                    PostId = 1,
-                    CommentAuthor = "Karolina",
-                    CommentContent = "Już nie mogę się doczekać!",
-                    CommentDate = DateTime.Now,
-                },
-                new
-                {
-                    CommentId = 2,
-                    PostId = 2,
-                    CommentAuthor = "Milena",
-                    CommentContent = "Słabo im szło w tym sezonie.",
-                    CommentDate = DateTime.Now,
-                },
-                new
-                {
-                    CommentId = 3,
-                    PostId = 3,
-                    CommentAuthor = "Andrzej",
-                    CommentContent = "Tak, doszło do trzykrotnego zwiększenia jej wielkości.",
-                    CommentDate = DateTime.Now,
-                },
-                new
-                {
-                    CommentId = 4,
-                    PostId = 4,
-                    CommentAuthor = "Karol",
-                    CommentContent = "Oczywiście, że Toyota!",
-                    CommentDate = DateTime.Now,
-                },
-                new
-                {
-                    CommentId = 5,
-                    PostId = 5,
-                    CommentAuthor = "Sam",
-                    CommentContent = "Najgorsze jest to, że na premierę na PC poczekamy pewnie do 2027.",
-                    CommentDate = DateTime.Now,
-                }
-                );
-
-            modelBuilder.Entity<PostEntity>().HasData(
-                new
-                {
-                    PostId = 1,
-                    PostAuthor = "Janek",
-                    TagId = 1,
-                    PostContent = "W 2025 wybory na prezydenta!",
-                    PostDate = DateTime.Now
-                },
-                new
-                {
-                    PostId = 2,
-                    PostAuthor = "Grzegorz",
-                    TagId = 2,
-                    PostContent = "Real Madryt odpadł z ligi mistrzów.",
-                    PostDate = DateTime.Now
-                },
-                new
-                {
-                    PostId = 3,
-                    PostAuthor = "Ania",
-                    TagId = 3,
-                    PostContent = "Wiatr słoneczny zniekształcił atmosfere marsa!",
-                    PostDate = DateTime.Now
-                },
-                new
-                {
-                    PostId = 4,
-                    PostAuthor = "Kasia",
-                    TagId = 4,
-                    PostContent = "Toyota Supra vs Nissan Skyline R34?",
-                    PostDate = DateTime.Now,
-
-                },
-                new
-                {
-                    PostId = 5,
-                    PostAuthor = "Alex",
-                    TagId = 5,
-                    PostContent = "Nie mogę się doczekać premiery GTA VI!",
-                    PostDate = DateTime.Now,
-                }
-                );
-
-            base.OnModelCreating(modelBuilder);
-
-            var admin = new IdentityUser()
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserName = "Kacper",
-                NormalizedUserName = "KACPER",
-                Email = "kacper@wsei.edu.pl",
-                NormalizedEmail = "KACPER@WSEI.EDU.PL",
-                EmailConfirmed = true,
-            };
-
-            var user = new IdentityUser()
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserName = "Hubert",
-                NormalizedUserName = "HUBERT",
-                Email = "hubert@wsei.edu.pl",
-                NormalizedEmail = "HUBERT@WSEI.EDU.PL",
-                EmailConfirmed = true,
-            };
-            PasswordHasher<IdentityUser> passwordHasher = new PasswordHasher<IdentityUser>();
-
-            admin.PasswordHash = passwordHasher.HashPassword(admin, "123!Abc");
-            user.PasswordHash = passwordHasher.HashPassword(user, "1234Abcd!");
-
-            modelBuilder.Entity<IdentityUser>().HasData(admin);
-            modelBuilder.Entity<IdentityUser>().HasData(user);
-
-            var adminRole = new IdentityRole()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "admin",
-                NormalizedName = "ADMIN",
-            };
-
-            adminRole.ConcurrencyStamp = adminRole.Id;
-            modelBuilder.Entity<IdentityRole>().HasData(adminRole);
-
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string>()
-                {
-                    RoleId = adminRole.Id,
-                    UserId = admin.Id,
-                });
-
+                modelBuilder.Entity<PostEntity>().HasData(
+        new
+        {
+            PostId = 1,
+            PostAuthor = "Janek",
+            TagId = 1,
+            PostContent = "Lorem Lorem",
+            PostDate = DateTime.Now
+        },
+        new
+        {
+            PostId = 2,
+            PostAuthor = "Grzegorz",
+            TagId = 2,
+            PostContent = "Kocham jak nie działa mi w projekcie identity.",
+            PostDate = DateTime.Now
+        },
+        new
+        {
+            PostId = 3,
+            PostAuthor = "Ania",
+            TagId = 3,
+            PostContent = "ZZZZZ",
+            PostDate = DateTime.Now
+        },
+        new
+        {
+            PostId = 4,
+            PostAuthor = "Kasia",
+            TagId = 4,
+            PostContent = "Tragiczna dziś podoga!",
+            PostDate = DateTime.Now,
+        },
+        new
+        {
+            PostId = 5,
+            PostAuthor = "Alex",
+            TagId = 5,
+            PostContent = "Kocham Kraków.",
+            PostDate = DateTime.Now,
+        },
+        new
+        {
+            PostId = 6,
+            PostAuthor = "Michał",
+            TagId = 1,
+            PostContent = "Nowe odkrycia archeologiczne na Bliskim Wschodzie.",
+            PostDate = DateTime.Now.AddDays(-1),
+        },
+        new
+        {
+            PostId = 7,
+            PostAuthor = "Karolina",
+            TagId = 2,
+            PostContent = "Najnowsze trendy w świecie mody.",
+            PostDate = DateTime.Now.AddDays(-2),
+        },
+        new
+        {
+            PostId = 8,
+            PostAuthor = "Piotrek",
+            TagId = 3,
+            PostContent = "Odkryto nowe gatunki roślin w dżungli Amazonii.",
+            PostDate = DateTime.Now.AddDays(-3),
+        },
+        new
+        {
+            PostId = 9,
+            PostAuthor = "Magda",
+            TagId = 4,
+            PostContent = "Porównanie aparatów fotograficznych: Canon vs Nikon.",
+            PostDate = DateTime.Now.AddDays(-4),
+        },
+        new
+        {
+            PostId = 10,
+            PostAuthor = "Bartek",
+            TagId = 5,
+            PostContent = "Przyszłość sztucznej inteligencji.",
+            PostDate = DateTime.Now.AddDays(-5),
+        },
+        new
+        {
+            PostId = 11,
+            PostAuthor = "Monika",
+            TagId = 1,
+            PostContent = "Rekordy Guinnessa w sporcie.",
+            PostDate = DateTime.Now.AddDays(-6),
+        },
+        new
+        {
+            PostId = 12,
+            PostAuthor = "Tomasz",
+            TagId = 2,
+            PostContent = "Historia rozwoju technologii komputerowej.",
+            PostDate = DateTime.Now.AddDays(-7),
+        },
+        new
+        {
+            PostId = 13,
+            PostAuthor = "Ola",
+            TagId = 3,
+            PostContent = "Badania nad życiem pozaziemskim.",
+            PostDate = DateTime.Now.AddDays(-8),
+        },
+        new
+        {
+            PostId = 14,
+            PostAuthor = "Łukasz",
+            TagId = 4,
+            PostContent = "Nowości na rynku samochodowym.",
+            PostDate = DateTime.Now.AddDays(-9),
+        },
+        new
+        {
+            PostId = 15,
+            PostAuthor = "Natalia",
+            TagId = 5,
+            PostContent = "Kulinarne podróże po świecie.",
+            PostDate = DateTime.Now.AddDays(-10),
         }
-    }
+    );
+
+            }
+        }
 }

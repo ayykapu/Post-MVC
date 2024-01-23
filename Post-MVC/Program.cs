@@ -11,18 +11,16 @@ namespace Post_MVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var connectionString = builder.Configuration.GetConnectionString("AppDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDbContextConnection' not found.");
+
+            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddSession();
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<AppDbContext>();
-            builder.Services.AddDefaultIdentity<IdentityUser>()       
-                .AddRoles<IdentityRole>()                             
-                .AddEntityFrameworkStores<AppDbContext>();     
+
             builder.Services.AddTransient<IPostService, EFPostService>();
-            builder.Services.AddMemoryCache();                        
-            builder.Services.AddSession();                            
+            builder.Services.AddDbContext<AppDbContext>();
 
             var app = builder.Build();
 
@@ -38,11 +36,14 @@ namespace Post_MVC
             app.UseStaticFiles();
 
             app.UseRouting();
-           // app.UseMiddleware<LastVisitCookie>();
-            app.UseAuthentication();                                 
-            app.UseAuthorization();                                  
-            app.UseSession();                                        
-            app.MapRazorPages();                                     
+            // app.UseMiddleware<LastVisitCookie>();
+
+           // app.UseAuthentication();
+           // app.UseAuthorization();
+
+            //app.UseSession();
+           // app.MapRazorPages();
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
