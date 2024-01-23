@@ -84,7 +84,7 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Post" asp-action="PagedIndex">Zobacz posty</a>
                         </li>
-                        <partial name="_LoginPartial" />
+                      @*   <partial name="_LoginPartial" /> *@
                     </ul>
                 </div>
             </div>
@@ -98,7 +98,7 @@
 
     <footer class="border-top footer">
         <div class="container">
-            Projekt ASP-NET
+            <h3>Last visit: @ViewData["Visit"]</h3>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

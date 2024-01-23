@@ -13,8 +13,10 @@ namespace Data.Entities
         [Key]
         public int PostId { get; set; }
         [Required]
+        [MaxLength(200)]
         public string PostContent { get; set; }
         [Required]
+        [MaxLength(30)]
         public string PostAuthor { get; set; }
         [Required]
         public DateTime PostDate { get; set; }

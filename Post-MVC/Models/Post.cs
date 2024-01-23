@@ -12,8 +12,12 @@ namespace Post_MVC.Models
         [HiddenInput]
         public int PostId { get; set; }
         [Required]
+        [Display(Name = "Podaj treść posta.")]
+        [MaxLength(length: 200, ErrorMessage = "Post jest zbyt długi.")]
         public string PostContent { get; set; }
         [Required]
+        [Display(Name = "Podaj autora posta.")]
+        [MaxLength(length: 30, ErrorMessage = "Nazwa autora jest zbyt długa.")]
         public string PostAuthor { get; set; }
 
         [DataType(DataType.Date)]

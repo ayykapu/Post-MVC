@@ -15,6 +15,7 @@ namespace Post_MVC.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Visit"] = Response.HttpContext.Items[LastVisitCookie.CookieName];
             return View();
         }
 
