@@ -7,10 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         public DbSet<TagEntity> Tags { get; set; }
         public DbSet<PostEntity> Posts { get; set; }
@@ -31,40 +32,109 @@ namespace Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
 
-            //string ADMIN_ID = Guid.NewGuid().ToString();
-            //string ROLE_ID = Guid.NewGuid().ToString();
+            ///////// ADMIN ROLE //////////////
+            string ADMIN_ID = Guid.NewGuid().ToString();
+            string ADMIN_ROLE_ID = Guid.NewGuid().ToString();
 
-            //modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
-            //{
-            //    Name = "admin",
-            //    NormalizedName = "ADMIN",
-            //    Id = ROLE_ID,
-            //    ConcurrencyStamp = ROLE_ID
-            //});
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Name = "admin",
+                NormalizedName = "ADMIN",
+                Id = ADMIN_ROLE_ID,
+                ConcurrencyStamp = ADMIN_ROLE_ID
+            });
 
-            //var admin = new IdentityUser
-            //{
-            //    Id = ADMIN_ID,
-            //    Email = "adam@wsei.edu.pl",
-            //    NormalizedEmail = "ADAM@WSEI.EDU.PL",
-            //    EmailConfirmed = true,
-            //    UserName = "adam",
-            //    NormalizedUserName = "ADMIN"
-            //};
+            var admin = new IdentityUser
+            {
+                Id = ADMIN_ID,
+                UserName = "Tadek",
+                NormalizedUserName = "TADEK",
+                Email = "tadek123@gmail.pl",
+                NormalizedEmail = "TADEK123@GMAIL.PL",
+                EmailConfirmed = true,
+            };
 
-            //PasswordHasher<IdentityUser> ph = new PasswordHasher<IdentityUser>();
-            //admin.PasswordHash = ph.HashPassword(admin, "1234abcd!@#$ABCD");
+            PasswordHasher<IdentityUser> adminPasswordHasher = new PasswordHasher<IdentityUser>();
+            admin.PasswordHash = adminPasswordHasher.HashPassword(admin, "ABcd12#$");
 
-            //modelBuilder.Entity<IdentityUser>().HasData(admin);
+            modelBuilder.Entity<IdentityUser>().HasData(admin);
 
-            //modelBuilder.Entity<IdentityUserRole<string>>()
-            //.HasData(new IdentityUserRole<string>
-            //{
-            //    RoleId = ROLE_ID,
-            //    UserId = ADMIN_ID
-            //});
+            modelBuilder.Entity<IdentityUserRole<string>>()
+            .HasData(new IdentityUserRole<string>
+            {
+                RoleId = ADMIN_ROLE_ID,
+                UserId = ADMIN_ID
+            });
+
+            /////////////// MOD ROLE /////////////////
+            string MOD_ID = Guid.NewGuid().ToString();
+            string MOD_ROLE_ID = Guid.NewGuid().ToString();
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Name = "mod",
+                NormalizedName = "MOD",
+                Id = MOD_ROLE_ID,
+                ConcurrencyStamp = MOD_ROLE_ID
+            });
+
+            var mod = new IdentityUser
+            {
+                Id = MOD_ID,
+                UserName = "Tomasz",
+                NormalizedUserName = "TOMASZ",
+                Email = "tomasz@o2.pl",
+                NormalizedEmail = "TOMASZ@o2.PL",
+                EmailConfirmed = true,
+            };
+
+            PasswordHasher<IdentityUser> modPasswordHasher = new PasswordHasher<IdentityUser>();
+            mod.PasswordHash = modPasswordHasher.HashPassword(mod, "ABcd12#$!");
+
+            modelBuilder.Entity<IdentityUser>().HasData(mod);
+
+            modelBuilder.Entity<IdentityUserRole<string>>()
+                .HasData(new IdentityUserRole<string>
+                {
+                    RoleId = MOD_ROLE_ID,
+                    UserId = MOD_ID
+                });
+
+            /////////////// USER ROLE /////////////////
+            string USER_ID = Guid.NewGuid().ToString();
+            string USER_ROLE_ID = Guid.NewGuid().ToString();
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Name = "user",
+                NormalizedName = "USER",
+                Id = USER_ROLE_ID,
+                ConcurrencyStamp = USER_ROLE_ID
+            });
+
+            var user = new IdentityUser
+            {
+                Id = USER_ID,
+                UserName = "Arkadiusz",
+                NormalizedUserName = "ARKADIUSZ",
+                Email = "arkadiuszpol@onet.pl",
+                NormalizedEmail = "ARKADIUSZPOL@ONET.PL",
+                EmailConfirmed = true,
+            };
+
+            PasswordHasher<IdentityUser> userPasswordHasher = new PasswordHasher<IdentityUser>();
+            user.PasswordHash = userPasswordHasher.HashPassword(user, "ABcd12#$");
+
+            modelBuilder.Entity<IdentityUser>().HasData(user);
+
+            modelBuilder.Entity<IdentityUserRole<string>>()
+                .HasData(new IdentityUserRole<string>
+                {
+                    RoleId = USER_ROLE_ID,
+                    UserId = USER_ID
+                });
 
 
             modelBuilder.Entity<PostEntity>().HasOne(c => c.Tag).WithMany(o => o.Posts).HasForeignKey(c => c.TagId);
@@ -179,7 +249,7 @@ namespace Data
             PostId = 2,
             PostAuthor = "Grzegorz",
             TagId = 2,
-            PostContent = "Kocham jak nie działa mi w projekcie identity.",
+            PostContent = "Kocham jak w końcu działa mi w projekcie identity.",
             PostDate = DateTime.Now
         },
         new

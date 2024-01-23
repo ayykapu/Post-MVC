@@ -11,16 +11,22 @@ namespace Post_MVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var connectionString = builder.Configuration.GetConnectionString("AppDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDbContextConnection' not found.");
 
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+         
 
             // Add services to the container.
-            builder.Services.AddRazorPages();
-            builder.Services.AddSession();
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddTransient<IPostService, EFPostService>();
             builder.Services.AddDbContext<AppDbContext>();
+            builder.Services.AddRazorPages();                         // dodaæ
+            builder.Services.AddDefaultIdentity<IdentityUser>()       // dodaæ
+                        .AddRoles<IdentityRole>()                             
+                        .AddEntityFrameworkStores<AppDbContext>();
+            builder.Services.AddMemoryCache();                        // dodaæ
+            builder.Services.AddSession();                            // dodaæ    
+
 
             var app = builder.Build();
 
@@ -37,12 +43,11 @@ namespace Post_MVC
 
             app.UseRouting();
             app.UseMiddleware<LastVisitCookie>();
+            app.UseAuthentication();                                 // dodaæ
+            app.UseAuthorization();                                  // dodaæ
+            app.UseSession();                                        // dodaæ 
+            app.MapRazorPages();                                     // dodaæ
 
-           // app.UseAuthentication();
-           // app.UseAuthorization();
-
-            //app.UseSession();
-           // app.MapRazorPages();
 
             app.MapControllerRoute(
                 name: "default",

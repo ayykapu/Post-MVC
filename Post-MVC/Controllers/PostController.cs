@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Post_MVC.Models;
+using System.Collections.Generic;
 
 namespace Post_MVC.Controllers
 {
-
     public class PostController : Controller
     {
         private readonly IPostService _postService;
@@ -15,7 +15,7 @@ namespace Post_MVC.Controllers
             _postService = postService;
         }
 
-        [AllowAnonymous]
+        [AllowAnonymous] 
         public IActionResult Index(int tagId = 0)
         {
             ViewBag.TagId = tagId;
@@ -25,8 +25,7 @@ namespace Post_MVC.Controllers
                 return View(_postService.FindByTag(tagId));
         }
 
-
-        [AllowAnonymous]
+        [AllowAnonymous] 
         public IActionResult PagedIndex(int tagId = 0, int page = 1, int size = 2)
         {
             List<Post> list = new List<Post>();
@@ -39,15 +38,15 @@ namespace Post_MVC.Controllers
             return View(pagingList);
         }
 
-
         [HttpGet]
+        [Authorize(Roles = "user, mod, admin")]
         public IActionResult Create()
         {
             return View();
         }
 
- 
         [HttpPost]
+        [Authorize(Roles = "user, mod, admin")]
         public IActionResult Create(Post model)
         {
             if (ModelState.IsValid)
@@ -58,30 +57,30 @@ namespace Post_MVC.Controllers
             return View();
         }
 
-
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public IActionResult Delete(int id)
         {
             return View(_postService.FindById(id));
-
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public IActionResult Delete(Post model)
         {
             _postService.Delete(model.PostId);
             return RedirectToAction("PagedIndex");
         }
 
-
         [HttpGet]
+        [Authorize(Roles = "mod, admin")]
         public IActionResult Update(int id)
         {
             return View(_postService.FindById(id));
         }
 
-
         [HttpPost]
+        [Authorize(Roles = "mod, admin")]
         public IActionResult Update(Post model)
         {
             if (ModelState.IsValid)
@@ -92,14 +91,12 @@ namespace Post_MVC.Controllers
             return View();
         }
 
-
         [HttpGet]
+        [Authorize(Roles = "user, mod, admin")]
         public IActionResult Details(int id)
         {
             var model = _postService.FindById(id);
             return model is null ? NotFound() : View(model);
         }
-
-        
     }
 }
