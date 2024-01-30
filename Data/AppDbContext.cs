@@ -86,12 +86,12 @@ namespace Data
                 UserName = "Tomasz",
                 NormalizedUserName = "TOMASZ",
                 Email = "tomasz@o2.pl",
-                NormalizedEmail = "TOMASZ@o2.PL",
+                NormalizedEmail = "TOMASZ@O2.PL",
                 EmailConfirmed = true,
             };
 
             PasswordHasher<IdentityUser> modPasswordHasher = new PasswordHasher<IdentityUser>();
-            mod.PasswordHash = modPasswordHasher.HashPassword(mod, "ABcd12#$!");
+            mod.PasswordHash = modPasswordHasher.HashPassword(mod, "ABcd12#$");
 
             modelBuilder.Entity<IdentityUser>().HasData(mod);
 

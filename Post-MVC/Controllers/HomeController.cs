@@ -15,9 +15,18 @@ namespace Post_MVC.Controllers
 
         public IActionResult Index()
         {
-            ViewData["Visit"] = Response.HttpContext.Items[LastVisitCookie.CookieName];
+            if (Response.HttpContext.Items[LastVisitCookie.CookieName] is DateTime lastVisit)
+            {
+                ViewData["Visit"] = lastVisit.ToString("yyyy-MM-dd");
+            }
+            else
+            {
+                ViewData["Visit"] = null;
+            }
+
             return View();
         }
+
 
         public IActionResult Privacy()
         {
